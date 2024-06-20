@@ -1,46 +1,49 @@
-struct Node{
-    Node *next[2];
-    int cnt, end;
-    Node(){
-        fill(next, next+2, nullptr);
-        cnt = end = 0;
-    }
+struct node {
+  node* ch[2];
+  int cnt;
+
+  node() {
+    cnt = 0;
+    ch[0] = nullptr;
+    ch[1] = nullptr;
+  }
+
+  node* next(int b) {
+    if (!ch[b]) ch[b] = new node;
+    return ch[b];
+  }
 };
- 
-struct Trie{
-    Node *root;
- 
-    Trie(){
-        root = new Node();
+
+void ins(int x) {
+  node* targ = root;
+  for (int i = 29; i >= 0; --i) {
+    int v = !!(x & (1 << i));
+    targ = targ->next(v);
+    ++targ->cnt;
+  }
+}
+
+void del(int x) {
+  node* targ = root;
+  for (int i = 29; i >= 0; --i) {
+    int v = !!(x & (1 << i));
+    targ = targ->next(v);
+    --targ->cnt;
+  }
+}
+
+int best(int x) {
+  node* targ = root;
+  int ans = 0;
+  for (int i = 29; i >= 0; --i) {
+    int v = !!(x & (1 << i));
+    if (targ->next(v)->cnt > 0) {
+      targ = targ->next(v);
+    } else {
+      targ = targ->next(!v);
+      ans += (1 << i);
     }
- 
-    void insert(int val){
-        Node *start = root;
-        for(int i=30; i>=0; i--){
-            if(val & (1<<i)){
-                if(start->next[1] == NULL){
-                    start->next[1] = new Node();
-                }
-                start = start->next[1];
-            }else{
-                if(start->next[0] == NULL){
-                    start->next[0] = new Node();
-                }
-                start = start->next[0];
-            }
-            start->cnt++;
-        }
-    }
- 
-    void remove(int val){
-        Node *start = root;
-        for(int i=30; i>=0; i--){
-            if(val & (1<<i)){
-                start = start->next[1];
-            }else{
-                start = start->next[0];
-            }
-            start->cnt--;
-        }  
-    }
-};
+  }
+
+  return ans;
+}

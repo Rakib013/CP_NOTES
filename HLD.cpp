@@ -1,11 +1,3 @@
-// @author: Rakibul-Islam :)
- 
-#include <bits/stdc++.h>
-using namespace std;
-using ll = long long;
- 
-#define dbg(a) cerr<<__LINE__<<": "<<#a<<" = "<<a<<'\n'
- 
 const int N = 2e5 + 5;
 int n, q, k = 1 << 19;
 vector<int> a(N), st(k);
@@ -65,38 +57,11 @@ int path_query(int a, int b){
     }
     return max(res, query(tin[a] + 1, tin[b] + 1));
 }  
- 
-int main(){
-    cin.tie(0)->sync_with_stdio(0);
 
-    cin>>n>>q;
-    for(int i=0; i<n; i++){
-        cin>>a[i];
-    }
-    for(int i=1; i<n; i++){
-        int u, v;   cin>>u>>v;
-        u--, v--;
-        adj[u].push_back(v);
-        adj[v].push_back(u);
-    }
-    dfs(0, 0);
-    HLD(0, -1, 0);
- 
-    for(int i=0; i<n; i++){
-        update(tin[i] + 1, a[i]);
-    }
-    
-    while(q--){
-        int t;  cin>>t;
-        if(t == 1){
-            int s, x;   cin>>s>>x;
-            s--;
-            update(tin[s] + 1, x);
-        }else{
-            int a, b;   cin>>a>>b;
-            a--, b--;
-            cout<<path_query(a, b)<<'\n';
-        }
-    }
-    return 0;
+// In the main
+dfs(0, 0);
+HLD(0, -1, 0);
+
+for(int i=0; i<n; i++){
+    update(tin[i] + 1, a[i]);
 }

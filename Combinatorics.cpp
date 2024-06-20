@@ -1,5 +1,5 @@
-ll paw(ll a, ll b){
-    ll res = 1;
+long long paw(long long a, long long b){
+    long long res = 1;
     while(b){
         if(b % 2 == 1){
             (res *= a) %= mod;
@@ -11,7 +11,7 @@ ll paw(ll a, ll b){
 }
  
 struct comb{
-    vector<ll> fact, inv;
+    vector<long long> fact, inv;
     int n;
     comb(int _n){
         n = _n;
@@ -26,8 +26,7 @@ struct comb{
             (inv[i] = inv[i+1] * (i+1)) %= mod;
         }
     }
- 
-    ll ncr(ll n, ll r){
+    long long ncr(long long n, long long r){
         if(n == r)return 1;
         if(n < r)return 0;
         return ((fact[n] * inv[r])%mod * inv[n-r])%mod;

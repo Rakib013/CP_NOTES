@@ -1,29 +1,16 @@
-string s, t;    
-cin>>s>>t;
- 
-int n = s.size(), m = t.size();
-vector<int> pi(m);
-for(int i=1, j = 0; i<m; ){
-    if(t[i] == t[j]){
-        j++;
-        pi[i] = j;
-        i++;
-    }else{
-        if(j)j = pi[j-1];
-        else i++;
+vector<int> get_pi(vector<int> &s){
+  int n = s.size();
+  vector<int> pi(n);
+  for (int k = 0, i = 1; i < n; ++i){
+    if(s[i] == s[k]) {
+      pi[i] = ++k;
     }
-}
-
-int ans = 0;
-for(int i=0, j=0; i<n; ){
-    if(s[i] == t[j]){
-        i++, j++;
-    }else{
-        if(j)j = pi[j-1];
-        else i++;
+    else if(k == 0) {
+      pi[i] = 0;
     }
-    if(j == m){
-        ans++;
-        j = pi[j-1];
+    else {
+      k = pi[k-1], --i;
     }
+  }
+  return pi;
 }
