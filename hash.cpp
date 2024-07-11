@@ -1,4 +1,4 @@
-const int MAX = 2e5 + 5;
+const int MAX = 3e5 + 5;
 
 vector<long long> MOD = {
   127657753, 987654319, 
@@ -59,4 +59,11 @@ struct Hashing {
     (res2 *= ipw[l - 1][1]) %= MOD[1];
     return {res1, res2};
   }
+  auto merge(array<long long, 2> left, array<long long, 2> right, int left_sz) {
+    for (int i = 0; i < 2; i++) {
+      (right[i] *= pw[left_sz][i]) %= MOD[i];
+      (left[i] += right[i]) %= MOD[i];
+    }
+    return left;
+  };
 };
