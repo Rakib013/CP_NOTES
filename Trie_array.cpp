@@ -1,41 +1,45 @@
-int trie[N][2];
-int cnt[N][2];
+constexpr int N = 200000 * 31;
  
-int tot = 0;
+int tot;
+ 
+int trie[N][2];
+int cnt[N];
+ 
 int newNode() {
     int x = ++tot;
     trie[x][0] = trie[x][1] = 0;
-    cnt[x][0] = cnt[x][1] = 0;
+    cnt[x] = 0;
     return x;
 }
  
-void add(int x, int d, int t = 1) {
-    int p = 1;
-    cnt[p][d] += t;
+void init() {
+    tot = 0;
+    newNode();
+}
+ 
+void add(int x, int t) {
+    int o = 1;
     for (int i = 29; i >= 0; i--) {
-        int u = x >> i & 1;
-        if (!trie[p][u]) {
-            trie[p][u] = newNode();
+        int &p = trie[o][x >> i & 1];
+        if (!p) {
+            p = newNode();
         }
-        p = trie[p][u];
-        cnt[p][d] += t;
+        o = p;
+        cnt[o] += t;
     }
 }
  
-int query(int x, int d) {
-    int p = 1;
-    if (!cnt[p][d]) {
-        return 0;
-    }
+int query(int x) {
+    int o = 1;
     int ans = 0;
     for (int i = 29; i >= 0; i--) {
-        int u = x >> i & 1;
-        if (cnt[trie[p][u ^ 1]][d]) {
+        int d = x >> i & 1;
+        if (cnt[trie[o][d ^ 1]]) {
+            d ^= 1;
             ans |= 1 << i;
-            p = trie[p][u ^ 1];
-        } else {
-            p = trie[p][u];
         }
+        o = trie[o][d];
     }
     return ans;
 }
+ 
