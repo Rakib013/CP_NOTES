@@ -1,45 +1,50 @@
-constexpr int N = 200000 * 31;
+constexpr int N = 2e5 + 10;
+const int BIT = 30;
+int trie[N * BIT][2], cnt[N * BIT];
+int node = 2;
  
-int tot;
- 
-int trie[N][2];
-int cnt[N];
- 
-int newNode() {
-    int x = ++tot;
-    trie[x][0] = trie[x][1] = 0;
-    cnt[x] = 0;
-    return x;
+void ins(int num) {
+  int u = 1;
+  for(int i = BIT - 1; i >= 0; --i) {
+    int bit = (num >> i) & 1;
+    if(!trie[u][bit]) trie[u][bit] = node++;
+
+    u = trie[u][bit];
+    cnt[u] += 1;
+  }
 }
  
-void init() {
-    tot = 0;
-    newNode();
-}
- 
-void add(int x, int t) {
-    int o = 1;
-    for (int i = 29; i >= 0; i--) {
-        int &p = trie[o][x >> i & 1];
-        if (!p) {
-            p = newNode();
-        }
-        o = p;
-        cnt[o] += t;
+void del(int num) {
+  int u = 1;
+  for(int i = BIT - 1; i >= 0; --i) {
+    int bit = (num >> i) & 1;
+    int nxt_node = trie[u][bit];
+    if(--cnt[nxt_node] == 0) {
+      trie[u][bit] = 0 ;
+      return;
     }
+    u = nxt_node;
+  }
 }
  
-int query(int x) {
-    int o = 1;
-    int ans = 0;
-    for (int i = 29; i >= 0; i--) {
-        int d = x >> i & 1;
-        if (cnt[trie[o][d ^ 1]]) {
-            d ^= 1;
-            ans |= 1 << i;
-        }
-        o = trie[o][d];
+int mx_xor(int num) {
+  int ans = 0, u = 1;
+  for(int i = BIT - 1; i >= 0; --i) {
+    int bit = (num >> i) & 1;
+    int flip = bit ^ 1;
+    if(trie[u][flip] and cnt[trie[u][flip]] > 0){
+      ans  |= (1 << i);
+      u = trie[u][flip];
     }
-    return ans;
+    else u = trie[u][bit];
+  }
+  return ans;
 }
  
+void clear() {
+  for (int i = 1; i < node; ++i) {
+      cnt[i] = 0;
+      trie[i][0] = trie[i][1] = 0;
+  }
+  node = 2; 
+}
