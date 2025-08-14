@@ -14,3 +14,15 @@ vector<int> get_pi(vector<int> &s){
   }
   return pi;
 }
+
+vector nxt(v.size() + 5, vector (26, 0));
+  for (int i = 0; i < v.size(); i++) {
+    for (int j = 0; j < 26; j++) {
+      int p = i;
+      while (v[p] - 'A' != j) {
+        if (p == 0) break;
+        p = pi[p - 1];
+      }
+      if (v[p] - 'A' == j) nxt[i][j] = p + 1;
+    }
+  }
