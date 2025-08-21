@@ -7,7 +7,7 @@ struct Fenwick{
   }
 
   void update(int idx, int val){
-    for(idx; idx<=n; idx += idx & (-idx)){
+    for(idx; idx < n; idx += idx & (-idx)){
       bit[idx] += val;
     }
   }
