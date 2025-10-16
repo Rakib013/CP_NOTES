@@ -1,36 +1,34 @@
 struct node{
-  int lazy;
+  ll lazy;
   node() {
     lazy = 0;
   }
 };
  
-struct seglazy{
+struct SegTree{
   vector<node> tr;
   vector<int> a;
-  seglazy (int N) {
+  SegTree (int N) {
     tr.resize(4 * N);
     a.resize(N);
   }
-  node merge (node &res, node &l, node &r) {
-    node res;
-    return res;
+  void merge (node &res, node &l, node &r) {
+    // Merge
   }
   void push_down(int cur, int child) {
-    if (tr[cur].lazy) {
-      tr[child].lazy = tr[cur].lazy;
-    }
+    // Check what needs to do, add or something else.
+    tr[child].lazy += tr[cur].lazy;
   }
-  void push(int u, int l, int r){
+  void push(int u, int l, int r) {
+    if (tr[u].lazy == 0) return;
     if (l != r) {
-      // Push down the current value
       int v = u << 1;
       push_down(u, v);
       push_down(u, v | 1);
     }
-    // Add current value to the current node
-    if (tr[u].lazy != 0) {}
-    // Clear the currect lazy value
+    // Update the current node value
+    tr[u]. = tr[u].lazy;
+    // Unset the lazy value
     tr[u].lazy = 0;
   }
   void build (int u, int s, int e) {
@@ -43,11 +41,11 @@ struct seglazy{
     build(w, m + 1, e);
     merge(tr[u], tr[v], tr[w]);
   }
-  void update(int l, int r, int val, int u, int s, int e) {
+  void update(int l, int r, ll val, int u, int s, int e) {
     push(u, s, e);
     if(e < l || s > r)return;
     if(s >= l && e <= r){
-      // Update lazy here
+      // Update the lazy here
       push(u, s, e);
       return;
     }
